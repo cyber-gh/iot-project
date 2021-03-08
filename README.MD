@@ -1,7 +1,5 @@
 <h2>How to run</h2>
-```sh
-    docker-compose up -d --build
-```
-```sh
-    curl http://localhost:9080
-```
+
+<pre>docker-compose up -d --build</pre>
+<pre>curl http://localhost:9080</pre>
+
