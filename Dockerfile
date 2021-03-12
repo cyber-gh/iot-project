@@ -25,6 +25,8 @@ RUN apt-get install -y libgtest-dev
 RUN apt-get install sqlite3
 RUN apt-get install libsqlite3-dev
 
+RUN apt install -y nlohmann-json3-dev
+
 RUN add-apt-repository ppa:pistache+team/unstable
 RUN apt update
 RUN apt install -y libpistache-dev

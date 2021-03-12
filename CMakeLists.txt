@@ -3,6 +3,7 @@ project(pistache_cpp_example)
 
 set(CMAKE_CXX_STANDARD 14)
 find_package(Pistache 0.0.2 REQUIRED)
+find_package(nlohmann_json 3.7.0 REQUIRED)
 
 add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries(${PROJECT_NAME} pistache_shared)
+target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json pistache_shared)
