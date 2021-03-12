@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include <nlohmann/json.hpp>
 
 using namespace std;
 
@@ -16,7 +17,7 @@ struct TestModel {
 
     TestModel(int id, const string &name) : id(id), name(name) {}
 
-    TestModel parse(const vector<string> &v) {
+    static TestModel parse(const vector<string> &v) {
         if (v.size() != 2) {
             throw "Invalid TestModel dat, canot parse";
         }
@@ -24,6 +25,8 @@ struct TestModel {
         return TestModel(std::stoi(v[0]), v[1]);
     }
 };
+
+void to_json(nlohmann::json& j, const TestModel& p);
 
 
 #endif //PISTACHE_CPP_EXAMPLE_MODELS_H

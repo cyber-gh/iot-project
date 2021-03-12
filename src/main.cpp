@@ -1,9 +1,12 @@
 #include <pistache/endpoint.h>
-#include <nlohmann/json.hpp>
 #include "DatabaseAccess.h"
+#include "models.h"
+#include "vector"
 
 using namespace Pistache;
+using namespace std;
 
+using json = nlohmann::json;
 
 struct HelloHandler : public Http::Handler {
     HTTP_PROTOTYPE(HelloHandler)
@@ -13,14 +16,13 @@ struct HelloHandler : public Http::Handler {
 
         vector<vector<string> > v = db.selectQuery("select * from TestModel;");
 
+        vector<TestModel> ans;
         for (auto it: v) {
-            for (auto col: it) {
-                cout << col << " ";
-            }
-            cout << endl;
+            ans.push_back(TestModel::parse(it));
         }
 
-        writer.send(Http::Code::Ok, "Hello, World!");
+        json j = ans;
+        writer.send(Http::Code::Ok, j.dump());
     }
 
 };
