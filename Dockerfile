@@ -38,7 +38,7 @@ COPY . /home/pistache
 EXPOSE 9080
 RUN cmake .
 RUN make
-CMD ./pistache_cpp_example
+CMD ./smart_fridge_api
 
 
 

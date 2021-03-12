@@ -2,8 +2,7 @@
 // Created by Soltan Gheorghe on 12.03.2021.
 //
 
-#ifndef PISTACHE_CPP_EXAMPLE_MODELS_H
-#define PISTACHE_CPP_EXAMPLE_MODELS_H
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -29,4 +28,3 @@ struct TestModel {
 void to_json(nlohmann::json& j, const TestModel& p);
 
 
-#endif //PISTACHE_CPP_EXAMPLE_MODELS_H

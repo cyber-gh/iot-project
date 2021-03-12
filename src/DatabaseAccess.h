@@ -2,8 +2,7 @@
 // Created by Soltan Gheorghe on 12.03.2021.
 //
 
-#ifndef PISTACHE_CPP_EXAMPLE_DATABASEACCESS_H
-#define PISTACHE_CPP_EXAMPLE_DATABASEACCESS_H
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -17,4 +16,3 @@ public:
 };
 
 
-#endif //PISTACHE_CPP_EXAMPLE_DATABASEACCESS_H
