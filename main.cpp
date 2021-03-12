@@ -1,5 +1,4 @@
 #include <pistache/endpoint.h>
-#include <sqlite3.h>
 
 using namespace Pistache;
 
