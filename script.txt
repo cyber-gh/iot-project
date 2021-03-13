@@ -1,0 +1,17 @@
+CREATE TABLE Products (
+	id INTEGER NOT NULL,
+	name TEXT NOT NULL,
+	quantity INTEGER NOT NULL,
+	date TEXT NOT NULL,
+	max_temp INTEGER NOT NULL,
+	PRIMARY KEY (id, date)
+);
+
+INSERT INTO Products (id, name, quantity, date, max_temp)
+VALUES(1, 'Mere', 2, '2021-03-20', 10);
+INSERT INTO Products (id, name, quantity, date, max_temp)
+VALUES(1, 'Pere', 2, '2021-03-21', 10);
+INSERT INTO Products (id, name, quantity, date, max_temp)
+VALUES(1, 'Pulpe', 1, '2021-03-16', 0);
+
+select * from Products;
