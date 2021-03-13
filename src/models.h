@@ -8,13 +8,15 @@
 #include <vector>
 #include <nlohmann/json.hpp>
 
+using namespace std;
+
 struct TestModel {
     int id;
-    std::string name;
+    string name;
 
-    TestModel(int id, const std::string &name) : id(id), name(name) {}
+    TestModel(int id, const string &name) : id(id), name(name) {}
 
-    static TestModel parse(const std::vector<std::string> &v) {
+    static TestModel parse(const vector<string> &v) {
         if (v.size() != 2) {
             throw "Invalid TestModel, cannot parse";
         }
@@ -25,30 +27,30 @@ struct TestModel {
 
 struct Product {
     int id;
-    std::string name;
+    string name;
     int quantity;
-    std::string date; // YYYY-MM-DD format, expiration date
+    string date; // YYYY-MM-DD format, expiration date
     int maxTemp;
 
-    Product(int id, const std::string &name, int quantity, const std::string &date, int maxTemp) :
+    Product(int id, const string &name, int quantity, const string &date, int maxTemp) :
         id(id), name(name), quantity(quantity), date(date), maxTemp(maxTemp) {}
 
-    static Product parse(const std::vector<std::string> &v) {
+    static Product parse(const vector<string> &v) {
         if (v.size() != 5) {
             throw "Invalid Product, cannot parse";
         }
 
-        return Product(std::stoi(v[0]), v[1], std::stoi(v[2]), v[3], std::stoi(v[4]));
+        return Product(stoi(v[0]), v[1], stoi(v[2]), v[3], stoi(v[4]));
     }
 
-    std::string genInsertQuery() {
-        std::string query = "";
+    string genInsertQuery() {
+        string query = "";
         query += "INSERT INTO Products (id, name, quantity, date, max_temp)\nVALUES(";
-        query += std::to_string(id) + ", ";
+        query += to_string(id) + ", ";
         query += name + ", ";
-        query += std::to_string(quantity) + ", ";
+        query += to_string(quantity) + ", ";
         query += date + ", ";
-        query += std::to_string(maxTemp) + ");";
+        query += to_string(maxTemp) + ");";
 
         return query;
     }
