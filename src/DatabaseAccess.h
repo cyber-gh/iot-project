@@ -13,6 +13,7 @@ using namespace std;
 class DatabaseAccess {
 public:
     vector<vector<string>> selectQuery(const string query);
+    void insertQuery(const string &query);
 };
 
 
