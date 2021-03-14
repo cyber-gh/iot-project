@@ -18,6 +18,10 @@ struct HelloHandler : public Http::Handler {
 
         string query = fridge.genSetTempQuery(t);
         db.updateQuery(query);
+
+        query = fridge.setEcoTempQuery();
+        db.updateQuery(query);
+
         query = fridge.genGetTempQuery();
         vector<vector<string> > v = db.selectQuery(query);
         t = t - 1;
@@ -26,6 +30,14 @@ struct HelloHandler : public Http::Handler {
         for (auto it: v) {
             ans.push_back(Fridge::parse(it));
         }
+//        select between two products
+//        query = fridge.selectProductByMinDate("Mere", "Pulpe");
+//        vector<vector<string>> v = db.selectQuery(query);
+//        vector<string> ans;
+//
+//        for (auto it: v) {
+//            ans.push_back(it[0]);
+//        }
 
         json j = ans;
         writer.send(Http::Code::Ok, j.dump());
