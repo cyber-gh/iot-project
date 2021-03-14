@@ -34,12 +34,5 @@ struct HelloHandler : public Http::Handler {
 };
 
 int main() {
-    DatabaseAccess db = DatabaseAccess();
-    
-    string query = Fridge::genCreateQuery();
-    db.createQuery(query);
-    Fridge fridge = Fridge(1, 232);
-    query = fridge.genInsertQuery();
-    db.insertQuery(query);
     Http::listenAndServe<HelloHandler>(Pistache::Address("*:9080"));
 }

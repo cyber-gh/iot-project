@@ -40,10 +40,6 @@ struct Fridge {
         return Fridge(stoi(v[0]), stoi(v[1]));
     }
 
-    static string genCreateQuery() {
-        return "CREATE TABLE fridges(id NUMBER, temp NUMBER);";
-    }
-
     string genInsertQuery() {
         string query = "";
         query += "INSERT INTO fridges (id, temp)\nVALUES(";
