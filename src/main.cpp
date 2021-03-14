@@ -13,12 +13,18 @@ struct HelloHandler : public Http::Handler {
     void onRequest(const Http::Request&, Http::ResponseWriter writer) override{
 
         DatabaseAccess db = DatabaseAccess();
+        Fridge fridge = Fridge(1, 232);
+        static int t = 13;
 
-        vector<vector<string> > v = db.selectQuery("select * from TestModel;");
+        string query = fridge.genSetTempQuery(t);
+        db.updateQuery(query);
+        query = fridge.genGetTempQuery();
+        vector<vector<string> > v = db.selectQuery(query);
+        t = t - 1;
 
-        vector<TestModel> ans;
+        vector<Fridge> ans;
         for (auto it: v) {
-            ans.push_back(TestModel::parse(it));
+            ans.push_back(Fridge::parse(it));
         }
 
         json j = ans;
@@ -28,5 +34,12 @@ struct HelloHandler : public Http::Handler {
 };
 
 int main() {
+    DatabaseAccess db = DatabaseAccess();
+    
+    string query = Fridge::genCreateQuery();
+    db.createQuery(query);
+    Fridge fridge = Fridge(1, 232);
+    query = fridge.genInsertQuery();
+    db.insertQuery(query);
     Http::listenAndServe<HelloHandler>(Pistache::Address("*:9080"));
 }

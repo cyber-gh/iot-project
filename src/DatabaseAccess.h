@@ -14,6 +14,8 @@ class DatabaseAccess {
 public:
     vector<vector<string>> selectQuery(const string query);
     void insertQuery(const string &query);
+    void updateQuery(const string &query);
+    void createQuery(const string &query);
 };
 
 
