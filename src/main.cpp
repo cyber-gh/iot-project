@@ -13,7 +13,6 @@ struct HelloHandler : public Http::Handler {
     void onRequest(const Http::Request&, Http::ResponseWriter writer) override{
 
         DatabaseAccess db = DatabaseAccess();
-        // int id, const string &name, int quantity, const string &date, int maxTemp
         Product product1 = Product(100, "Mihai1", 3, "2021-03-20", 30);
         Product product2 = Product(200, "Mihai2", 12, "2021-04-17", 30);
 
@@ -24,7 +23,12 @@ struct HelloHandler : public Http::Handler {
         query = product2.genInsertQuery();
         db.insertQuery(query);
 
-        query = product1.genGetQuery();
+        query = product1.genDeleteQuery();
+        db.deleteQuery(query);
+
+        Search searcher = Search();
+
+        query = searcher.genSearchFilter("Pere");
         vector<vector<string> > v = db.selectQuery(query);
 
         vector<Product> ans;

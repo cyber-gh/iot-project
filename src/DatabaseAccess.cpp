@@ -66,7 +66,7 @@ void DatabaseAccess::insertQuery(const string &query) {
     exit = sqlite3_open("database/db.sqlite", &db);
 
     if (exit) {
-        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        fprintf(stdout, "Can't open database: %s\n", sqlite3_errmsg(db));
     } else {
         fprintf(stdout, "Opened database successfully!\n");
     }
@@ -75,7 +75,7 @@ void DatabaseAccess::insertQuery(const string &query) {
     int rc = sqlite3_exec(db, sql, insertCallback, nullptr, nullptr);
 
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "SQL error\n");
+        fprintf(stdout, "SQL error\n");
     } else {
         fprintf(stdout, "Records created successfully\n");
     }

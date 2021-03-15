@@ -10,6 +10,7 @@
 
 using namespace std;
 
+
 struct TestModel {
     int id;
     string name;
@@ -25,6 +26,36 @@ struct TestModel {
     }
 };
 
+struct Search {
+
+    string formatString(const string &stringValue) {
+        return "'" + stringValue + "'";
+    }
+
+    string genSearchFilter(const string &productName) {
+        string query = "";
+        query += "SELECT * FROM Products WHERE name=";
+        query += formatString(productName);
+
+        return query;
+    }
+
+    string genSearchFilter(const int &maxQuantity) {
+        string query = "";
+        query += "SELECT * FROM Products WHERE quantity <=";
+        query += to_string(maxQuantity);
+
+        return query;
+    }
+
+    string genSearchFilter() {
+        string query = "";
+        query += "SELECT * FROM Products";
+
+        return query;
+    }
+};
+
 
 struct Product {
     int id;
@@ -32,6 +63,10 @@ struct Product {
     int quantity;
     string date; // YYYY-MM-DD format, expiration date
     int maxTemp;
+
+    string formatString(const string &stringValue) {
+        return "'" + stringValue + "'";
+    }
 
     Product(int id, const string &name, int quantity, const string &date, int maxTemp) :
             id(id), name(name), quantity(quantity), date(date), maxTemp(maxTemp) {}
@@ -46,13 +81,16 @@ struct Product {
 
     string genInsertQuery() {
         string query = "";
-        query += "INSERT INTO Products (id, name, quantity, date, max_temp)\nVALUES(";
+        query += "INSERT INTO Products (id, name, quantity, date, max_temp) VALUES (";
         query += to_string(id) + ", ";
-        query += name + ", ";
+        query += formatString(name) + ", ";
         query += to_string(quantity) + ", ";
-        query += date + ", ";
+        query += formatString(date) + ", ";
         query += to_string(maxTemp) + ");";
 
+
+        cout << query << "\n";
+        
         return query;
     }
 
@@ -60,13 +98,6 @@ struct Product {
         string query = "";
         query += "DELETE FROM Products where id=";
         query += to_string(id);
-
-        return query;
-    }
-
-    string genGetQuery() {
-        string query = "";
-        query += "SELECT * FROM Products";
 
         return query;
     }
