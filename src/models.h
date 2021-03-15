@@ -87,9 +87,6 @@ struct Product {
         query += to_string(quantity) + ", ";
         query += formatString(date) + ", ";
         query += to_string(maxTemp) + ");";
-
-
-        cout << query << "\n";
         
         return query;
     }
