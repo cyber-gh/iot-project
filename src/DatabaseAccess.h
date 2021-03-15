@@ -11,12 +11,22 @@
 using namespace std;
 
 class DatabaseAccess {
+private:
+    static DatabaseAccess *instance;
+
+    DatabaseAccess(){}
+
 public:
     vector<vector<string>> selectQuery(const string query);
     void insertQuery(const string &query);
     void deleteQuery(const string &query);
     void updateQuery(const string &query);
     void createQuery(const string &query);
+
+    static DatabaseAccess getInstance();
+
 };
+
+
 
 

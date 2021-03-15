@@ -1,7 +1,9 @@
+<<<<<<< HEAD
 #include <pistache/endpoint.h>
 #include "DatabaseAccess.h"
 #include "models.h"
 #include "vector"
+#include "SmartFridgeService.h"
 
 using namespace Pistache;
 using namespace std;
@@ -44,5 +46,7 @@ struct HelloHandler : public Http::Handler {
 };
 
 int main() {
-    Http::listenAndServe<HelloHandler>(Pistache::Address("*:9080"));
+
+    SmartFridgeService service = SmartFridgeService();
+    service.start();
 }

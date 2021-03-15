@@ -141,6 +141,25 @@ struct Fridge {
         query += to_string(id) + ";";
         return query;
     }
+
+    string setEcoTempQuery() {
+        string query = "";
+        query += "UPDATE fridges\nSET temp = ";
+        query += "(SELECT MIN(max_temp) FROM Products)\n";
+        query += "WHERE id = ";
+        query += to_string(id) + ";";
+        return query;
+    }
+
+    string selectProductByMinDate(string p1_name, string p2_name) {
+        string subQuery = "(SELECT min(date) FROM Products\n";
+        subQuery += "WHERE name = '" + p1_name + "' or name = '" + p2_name + "' );";
+        string query = "";
+        query += "SELECT name FROM Products \n";
+        query += "WHERE date = " + subQuery;
+        return query;
+    }
+
 };
 
 void to_json(nlohmann::json& j, const TestModel& p);
