@@ -4,6 +4,14 @@
 
 #include "DatabaseAccess.h"
 
+DatabaseAccess* DatabaseAccess::instance = 0;
+
+DatabaseAccess DatabaseAccess::getInstance() {
+    if (!instance) instance = new DatabaseAccess();
+
+    return *instance;
+}
+
 static int selectCallback(void* data, int argc, char** argv, char** azColName){
     vector<vector<string> > *v = (vector<vector<string> > *) data;
     v->push_back(vector<string>());

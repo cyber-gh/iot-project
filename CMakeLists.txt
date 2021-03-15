@@ -8,5 +8,5 @@ find_package (SQLite3)
 
 include_directories(${SQLite3_INCLUDE_DIRS})
 
-add_executable(${PROJECT_NAME} src/main.cpp src/models.cpp src/models.h src/DatabaseAccess.cpp src/DatabaseAccess.h)
+add_executable(${PROJECT_NAME} src/main.cpp src/models.cpp src/models.h src/DatabaseAccess.cpp src/DatabaseAccess.h src/SmartFridgeService.cpp src/SmartFridgeService.h)
 target_link_libraries(${PROJECT_NAME} ${SQLite3_LIBRARIES} nlohmann_json::nlohmann_json pistache_shared)
