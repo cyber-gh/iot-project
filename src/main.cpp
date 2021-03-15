@@ -13,23 +13,29 @@ struct HelloHandler : public Http::Handler {
     void onRequest(const Http::Request&, Http::ResponseWriter writer) override{
 
         DatabaseAccess db = DatabaseAccess();
-        Fridge fridge = Fridge(1, 232);
-        static int t = 13;
+        // int id, const string &name, int quantity, const string &date, int maxTemp
+        Product product1 = Product(100, "Mihai1", 3, "2021-03-20", 30);
+        Product product2 = Product(200, "Mihai2", 12, "2021-04-17", 30);
 
-        string query = fridge.genSetTempQuery(t);
-        db.updateQuery(query);
-        query = fridge.genGetTempQuery();
+        string query = product1.genInsertQuery();
+        db.insertQuery(query);
+
+
+        query = product2.genInsertQuery();
+        db.insertQuery(query);
+
+        query = product1.genGetQuery();
         vector<vector<string> > v = db.selectQuery(query);
-        t = t - 1;
 
-        vector<Fridge> ans;
+        vector<Product> ans;
         for (auto it: v) {
-            ans.push_back(Fridge::parse(it));
+            ans.push_back(Product::parse(it));
         }
 
         json j = ans;
         writer.send(Http::Code::Ok, j.dump());
     }
+
 
 };
 

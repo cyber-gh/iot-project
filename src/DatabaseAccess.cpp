@@ -17,6 +17,10 @@ static int insertCallback(void *data, int argc, char **argv, char **azColName) {
     return 0;
 }
 
+static int deleteCallback(void *data, int argc, char **argv, char **azColName) {
+    return 0;
+}
+
 static int updateCallback(void *data, int argc, char **argv, char **azColName) {
     return 0;
 }
@@ -78,6 +82,33 @@ void DatabaseAccess::insertQuery(const string &query) {
 
     sqlite3_close(db);
 }
+
+void DatabaseAccess::deleteQuery(const string &query) {
+    sqlite3 *db;
+    int exit = 0;
+    const char *sql = query.c_str();
+
+    /* Open database */
+    exit = sqlite3_open("database/db.sqlite", &db);
+
+    if (exit) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+    } else {
+        fprintf(stdout, "Opened database successfully!\n");
+    }
+
+    /* Execute SQL statement */
+    int rc = sqlite3_exec(db, sql, deleteCallback, nullptr, nullptr);
+
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error\n");
+    } else {
+        fprintf(stdout, "Record deleted successfully\n");
+    }
+
+    sqlite3_close(db);
+}
+
 
 
 void DatabaseAccess::updateQuery(const string &query) {

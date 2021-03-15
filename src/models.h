@@ -55,6 +55,21 @@ struct Product {
 
         return query;
     }
+
+    string genDeleteQuery() {
+        string query = "";
+        query += "DELETE FROM Products where id=";
+        query += to_string(id);
+
+        return query;
+    }
+
+    string genGetQuery() {
+        string query = "";
+        query += "SELECT * FROM Products";
+
+        return query;
+    }
 };
 
 
