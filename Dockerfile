@@ -65,7 +65,7 @@ EXPOSE 1883/tcp
 RUN cmake .
 RUN make
 
-CMD mosquitto
-
+#CMD mosquitto
+CMD ./smart_fridge_api
 
 
