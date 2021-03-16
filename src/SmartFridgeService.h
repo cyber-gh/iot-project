@@ -27,6 +27,8 @@ private:
     void setupRoutes();
 
     void getAllProducts(const Rest::Request &request, Http::ResponseWriter response);
+    void setTemperature(const Rest::Request &request, Http::ResponseWriter response);
+    void getTemperature(const Rest::Request &request, Http::ResponseWriter response);
 
 
 

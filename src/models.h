@@ -124,10 +124,21 @@ struct Fridge {
         return query;
     }
 
+    static string getTempQuery() { // id = 1
+        return "SELECT * FROM fridges WHERE id = 1;";
+    }
+
     string genGetTempQuery() {
         string query = "";
         query += "SELECT * FROM fridges WHERE id = ";
         query += to_string(id) + ";";
+        return query;
+    }
+
+    static string setTempQuery(int newTemp) { // id = 1
+        string query = "";
+        query += "UPDATE fridges\nSET temp = ";
+        query += to_string(newTemp) + "\nWHERE id = 1;";
         return query;
     }
 
