@@ -9,4 +9,11 @@ JSON Usage
 https://kezunlin.me/post/f3c3eb8/ <br>
 
 Sqlite usage
-https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm
+https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.
+htm
+
+MQTT Usage
+https://github.com/eclipse/paho.mqtt.cpp
+
+MQTT Examples
+https://github.com/eclipse/paho.mqtt.cpp/tree/master/src/samples

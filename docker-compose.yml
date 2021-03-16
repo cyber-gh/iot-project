@@ -7,6 +7,7 @@ services:
     restart: always
     ports:
       - "9080:9080"
+      - "1883:1883"
     networks:
       - main-network
 
