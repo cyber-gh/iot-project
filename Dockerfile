@@ -31,14 +31,41 @@ RUN add-apt-repository ppa:pistache+team/unstable
 RUN apt update
 RUN apt install -y libpistache-dev
 
+RUN apt-get install -y mosquitto
+RUN apt-get install -y mosquitto-clients
+RUN apt install -y net-tools
+
+RUN apt-get install -y libmosquitto-dev
+
+
+# install the paho c library
+WORKDIR /home/libraries
+RUN git clone https://github.com/eclipse/paho.mqtt.c.git
+WORKDIR /home/libraries/paho.mqtt.c
+RUN git checkout v1.3.8
+RUN cmake -Bbuild -H. -DPAHO_ENABLE_TESTING=OFF -DPAHO_BUILD_STATIC=ON -DPAHO_WITH_SSL=ON -DPAHO_HIGH_PERFORMANCE=ON
+RUN cmake --build build/ --target install
+RUN ldconfig
+
+#install the paho c++ library
+WORKDIR /home/libraries
+RUN git clone https://github.com/eclipse/paho.mqtt.cpp
+WORKDIR /home/libraries/paho.mqtt.cpp
+RUN cmake -Bbuild -H. -DPAHO_BUILD_STATIC=ON -DPAHO_BUILD_DOCUMENTATION=TRUE -DPAHO_BUILD_SAMPLES=TRUE
+RUN cmake --build build/ --target install
+RUN ldconfig
+
 WORKDIR /home/pistache
 COPY . /home/pistache
 
 
 EXPOSE 9080
+EXPOSE 1883/tcp
+
 RUN cmake .
 RUN make
-CMD ./smart_fridge_api
+
+CMD mosquitto
 
 
 
