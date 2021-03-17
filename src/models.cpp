@@ -28,3 +28,11 @@ void to_json(nlohmann::json& j, const Fridge& f) {
             {"temp", f.temp}
     };
 }
+
+void from_json(const nlohmann::json& j, Product& p) {
+    j.at("id").get_to(p.id);
+    j.at("name").get_to(p.name);
+    j.at("quantity").get_to(p.quantity);
+    j.at("date").get_to(p.date);
+    j.at("max_temp").get_to(p.maxTemp);
+}

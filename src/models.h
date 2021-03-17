@@ -68,6 +68,8 @@ struct Product {
         return "'" + stringValue + "'";
     }
 
+    Product() : id(-1), name(""), quantity(-1), date("0000-00-00"), maxTemp(-1) {}
+
     Product(int id, const string &name, int quantity, const string &date, int maxTemp) :
             id(id), name(name), quantity(quantity), date(date), maxTemp(maxTemp) {}
 
@@ -87,7 +89,7 @@ struct Product {
         query += to_string(quantity) + ", ";
         query += formatString(date) + ", ";
         query += to_string(maxTemp) + ");";
-        
+
         return query;
     }
 
@@ -106,7 +108,7 @@ struct Fridge {
     int temp;
 
     Fridge(int id, int temp) :
-        id(id), temp(temp) {}
+            id(id), temp(temp) {}
 
     static Fridge parse(const vector<string> &v) {
         if (v.size() != 2) {
@@ -173,5 +175,7 @@ struct Fridge {
 void to_json(nlohmann::json& j, const TestModel& p);
 void to_json(nlohmann::json& j, const Fridge& f);
 void to_json(nlohmann::json& j, const Product& p);
+
+void from_json(const nlohmann::json& j, Product& p);
 
 

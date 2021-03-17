@@ -7,19 +7,21 @@
 #include "SmartFridgeMqttClient.h"
 
 int main() {
+    SmartFridgeService service = SmartFridgeService();
+    service.start();
 
-    if (fork() == 0) {
-        SmartFridgeService service = SmartFridgeService();
-        service.start();
-    } else {
-        if (fork() == 0) {
-            system("mosquitto"); //TODO run the broker in a different docker container
-        } else {
-            SmartFridgeMqttClient client = SmartFridgeMqttClient();
-            client.run();
-        }
-
-
-    }
+//    if (fork() == 0) {
+//        SmartFridgeService service = SmartFridgeService();
+//        service.start();
+//    } else {
+//        if (fork() == 0) {
+//            system("mosquitto"); //TODO run the broker in a different docker container
+//        } else {
+//            SmartFridgeMqttClient client = SmartFridgeMqttClient();
+//            client.run();
+//        }
+//
+//
+//    }
 
 }
