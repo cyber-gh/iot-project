@@ -106,11 +106,6 @@ void SmartFridgeService::setEcoMode(const Rest::Request &request, Http::Response
 }
 
 void SmartFridgeService::recommendProduct(const Rest::Request &request, Http::ResponseWriter response) {
-//    http://localhost:9080/fridge/recommendProduct/ --recommend products with min expire date
-//    http://localhost:9080/fridge/recommendProduct/Mere/Pere -- if this products are in fridge:
-//                                                            recommend product with min expire date
-//                                                        else:
-//                                                            recommend most similiar product by name with min expire date
     addJsonContentTypeHeader(response);
 
     try {
