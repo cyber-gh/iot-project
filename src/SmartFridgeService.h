@@ -31,6 +31,8 @@ private:
     void setTemperature(const Rest::Request &request, Http::ResponseWriter response);
     void getTemperature(const Rest::Request &request, Http::ResponseWriter response);
 
+    void setEcoMode(const Rest::Request &request, Http::ResponseWriter response);
+    void recommendProduct(const Rest::Request &request, Http::ResponseWriter response);
 
 
 public:

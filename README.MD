@@ -17,3 +17,11 @@ https://github.com/eclipse/paho.mqtt.cpp
 
 MQTT Examples
 https://github.com/eclipse/paho.mqtt.cpp/tree/master/src/samples
+
+<h2>API</h2>
+<pre>http://localhost:9080/fridge/recommendProduct/ --recommend products with min expire date
+http://localhost:9080/fridge/recommendProduct/Mere/Pere -- if this products are in fridge:
+                                                           recommend product with min expire date
+                                                        else:
+                                                           recommend most similiar product by name with min expire date
+</pre>    

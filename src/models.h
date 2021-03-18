@@ -152,22 +152,73 @@ struct Fridge {
         return query;
     }
 
-    string setEcoTempQuery() {
+    static string setEcoTempQuery() { // id = 1
         string query = "";
         query += "UPDATE fridges\nSET temp = ";
         query += "(SELECT MIN(max_temp) FROM Products)\n";
         query += "WHERE id = ";
-        query += to_string(id) + ";";
+        query += to_string(1) + ";";
         return query;
     }
 
-    string selectProductByMinDate(string p1_name, string p2_name) {
+    static string chooseProductByMinDate(string p1Name, string p2Name) {
         string subQuery = "(SELECT min(date) FROM Products\n";
-        subQuery += "WHERE name = '" + p1_name + "' or name = '" + p2_name + "' );";
+        subQuery += "WHERE name = '" + p1Name + "' or name = '" + p2Name + "' );";
         string query = "";
         query += "SELECT name FROM Products \n";
         query += "WHERE date = " + subQuery;
         return query;
+    }
+
+    static string selectProductByMinDate() {
+        string subQuery = "(SELECT min(date) FROM Products);\n";
+        string query = "SELECT name FROM Products \n";
+        query += "WHERE date = " + subQuery;
+        return query;
+    }
+
+    static string selectAllProductsNames() {
+        string query = "SELECT name FROM Products;\n";
+        return query;
+    }
+
+    static int levDist(string s1, string s2) {
+        int m = s1.size();
+        int n = s2.size();
+
+        vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+
+        for (int i = 0; i <= m; i++) {
+            for (int j = 0; j <= n; j++) {
+                if (i == 0) {
+                    dp[i][j] = j;
+                }
+                else if (j == 0) {
+                    dp[i][j] - i;
+                }
+                else if(s1[i - 1] == s2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                }
+                else {
+                    dp[i][j] = 1 + min(dp[i][j - 1], min(dp[i - 1][j], dp[i - 1][j - 1]));
+                }
+            }
+        }
+
+        return dp[m][n];
+    }
+
+    static string getSimilarWord(string s, vector<string> words) {
+        string res = words[0];
+        int dist = levDist(s, res);
+        for (auto word: words) {
+            int tmp_dist = levDist(s, word);
+            if (tmp_dist < dist) {
+                dist = tmp_dist;
+                res = word;
+            }
+        }
+        return res;
     }
 
 };

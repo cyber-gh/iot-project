@@ -14,6 +14,9 @@ void SmartFridgeService::setupRoutes() {
 
     Routes::Post(router, "/setTemperature/:temp", Routes::bind(&SmartFridgeService::setTemperature, this));
     Routes::Get(router, "/getTemperature", Routes::bind(&SmartFridgeService::getTemperature, this));
+
+    Routes::Put(router, "/fridge/eco", Routes::bind(&SmartFridgeService::setEcoMode, this));
+    Routes::Get(router, "/fridge/recommendProduct/:p1Name?/:p2Name?", Routes::bind(&SmartFridgeService::recommendProduct, this));
 }
 
 void addJsonContentTypeHeader(Http::ResponseWriter &response) {
@@ -83,4 +86,72 @@ void SmartFridgeService::insertProduct(const Rest::Request &request, Http::Respo
     }
 
     response.send(Http::Code::Ok);
+}
+
+void SmartFridgeService::setEcoMode(const Rest::Request &request, Http::ResponseWriter response) {
+//    curl -X PUT localhost:9080/fridge/eco
+    addJsonContentTypeHeader(response);
+
+    try {
+        DatabaseAccess db = DatabaseAccess::getInstance();
+        string query = Fridge::setEcoTempQuery();
+        db.executeQuery(query);
+
+    } catch (...) {
+        response.send(Http::Code::Internal_Server_Error);
+        return;
+    }
+
+    response.send(Http::Code::Ok);
+}
+
+void SmartFridgeService::recommendProduct(const Rest::Request &request, Http::ResponseWriter response) {
+    addJsonContentTypeHeader(response);
+
+    try {
+        DatabaseAccess db = DatabaseAccess::getInstance();
+        if (request.hasParam(":p1Name") && request.hasParam(":p2Name")) {
+            string p1Name = request.param(":p1Name").as<string>();
+            string p2Name = request.param(":p2Name").as<string>();
+
+            string query = Fridge::chooseProductByMinDate(p1Name, p2Name);
+            vector<vector<string>> v = db.selectQuery(query);
+            if (v.size() > 0) {
+                auto ans = v[0];
+                json j = ans;
+                response.send(Http::Code::Ok, j.dump());
+            } else {
+                vector<string> ans;
+                query = Fridge::selectAllProductsNames();
+                v = db.selectQuery(query);
+                if (v.size() == 0) {
+                    ans.push_back("Fridge is empty");
+                    json j = ans;
+                    response.send(Http::Code::Ok, j.dump());
+                } else {
+                    string simP1 = Fridge::getSimilarWord(p1Name, v[0]);
+                    string simP2 = Fridge::getSimilarWord(p2Name, v[0]);
+                    query = Fridge::chooseProductByMinDate(simP1, simP2);
+                    v = db.selectQuery(query);
+                    ans = v[0];
+                }
+                json j = ans;
+                response.send(Http::Code::Ok, j.dump());
+            }
+            return;
+        } else if (!request.hasParam(":p1Name") && !request.hasParam(":p2Name")){
+            string query = Fridge::selectProductByMinDate();
+            vector<vector<string>> v = db.selectQuery(query);
+            auto ans = v[0];
+
+            json j = ans;
+            response.send(Http::Code::Ok, j.dump());
+            return;
+        }
+    } catch (...) {
+        response.send(Http::Code::Internal_Server_Error);
+        return;
+    }
+
+    response.send(Http::Code::Bad_Request);
 }
