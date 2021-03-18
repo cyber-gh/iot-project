@@ -15,8 +15,8 @@ void SmartFridgeService::setupRoutes() {
     Routes::Post(router, "/setTemperature/:temp", Routes::bind(&SmartFridgeService::setTemperature, this));
     Routes::Get(router, "/getTemperature", Routes::bind(&SmartFridgeService::getTemperature, this));
 
-    Routes::Post(router, "/setEcoMode", Routes::bind(&SmartFridgeService::setEcoMode, this));
-    Routes::Get(router, "/recommendProduct/:p1Name?/:p2Name?", Routes::bind(&SmartFridgeService::recommendProduct, this));
+    Routes::Put(router, "/fridge/eco", Routes::bind(&SmartFridgeService::setEcoMode, this));
+    Routes::Get(router, "/fridge/recommendProduct/:p1Name?/:p2Name?", Routes::bind(&SmartFridgeService::recommendProduct, this));
 }
 
 void addJsonContentTypeHeader(Http::ResponseWriter &response) {
@@ -89,7 +89,7 @@ void SmartFridgeService::insertProduct(const Rest::Request &request, Http::Respo
 }
 
 void SmartFridgeService::setEcoMode(const Rest::Request &request, Http::ResponseWriter response) {
-//    curl -X POST localhost:9080/setEcoMode
+//    curl -X PUT localhost:9080/fridge/eco
     addJsonContentTypeHeader(response);
 
     try {
@@ -106,8 +106,8 @@ void SmartFridgeService::setEcoMode(const Rest::Request &request, Http::Response
 }
 
 void SmartFridgeService::recommendProduct(const Rest::Request &request, Http::ResponseWriter response) {
-//    http://localhost:9080/recommendProduct/ --recommend products with min expire date
-//    http://localhost:9080/recommendProduct/Mere/Pere -- if this products are in fridge:
+//    http://localhost:9080/fridge/recommendProduct/ --recommend products with min expire date
+//    http://localhost:9080/fridge/recommendProduct/Mere/Pere -- if this products are in fridge:
 //                                                            recommend product with min expire date
 //                                                        else:
 //                                                            recommend most similiar product by name with min expire date
