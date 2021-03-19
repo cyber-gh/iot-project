@@ -27,9 +27,12 @@ private:
     void setupRoutes();
 
     void getAllProducts(const Rest::Request &request, Http::ResponseWriter response);
+    void insertProduct(const Rest::Request &request, Http::ResponseWriter response);
     void setTemperature(const Rest::Request &request, Http::ResponseWriter response);
     void getTemperature(const Rest::Request &request, Http::ResponseWriter response);
 
+    void setEcoMode(const Rest::Request &request, Http::ResponseWriter response);
+    void recommendProduct(const Rest::Request &request, Http::ResponseWriter response);
 
 
 public:
