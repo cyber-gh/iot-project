@@ -5,6 +5,9 @@
 <br>
 <pre>curl http://localhost:9080/products</pre>
 
+API Documentation
+https://app.swaggerhub.com/apis-docs/dioji/smart-fridge/1.0.0
+
 JSON Usage
 https://kezunlin.me/post/f3c3eb8/ <br>
 
