@@ -30,7 +30,7 @@ public:
     }
 
     void run() {
-        mqtt::async_client cli(SERVER_ADDRESS, CLIENT_ID);
+        mqtt::async_client client(SERVER_ADDRESS, CLIENT_ID);
         auto connOpts = mqtt::connect_options_builder()
                 .clean_session(false)
                 .finalize();
@@ -38,12 +38,12 @@ public:
         try {
             // Start consumer before connecting to make sure to not miss messages
 
-            cli.start_consuming();
+            client.start_consuming();
 
             // Connect to the server
 
             cout << "Connecting to the MQTT server..." << flush;
-            auto tok = cli.connect(connOpts);
+            auto tok = client.connect(connOpts);
 
             // Getting the connect response will block waiting for the
             // connection to complete.
@@ -53,7 +53,7 @@ public:
             // there is a session, then the server remembers us and our
             // subscriptions.
             if (!rsp.is_session_present())
-                cli.subscribe(TOPIC, QOS)->wait();
+                client.subscribe(TOPIC, QOS)->wait();
 
             cout << "OK" << endl;
 
@@ -64,7 +64,7 @@ public:
             cout << "Waiting for messages on topic: '" << TOPIC << "'" << endl;
 
             while (true) {
-                auto msg = cli.consume_message();
+                auto msg = client.consume_message();
                 if (!msg) break;
                 cout << msg->get_topic() << ": " << msg->to_string() << endl;
             }
@@ -72,11 +72,11 @@ public:
             // If we're here, the client was almost certainly disconnected.
             // But we check, just to make sure.
 
-            if (cli.is_connected()) {
+            if (client.is_connected()) {
                 cout << "\nShutting down and disconnecting from the MQTT server..." << flush;
-                cli.unsubscribe(TOPIC)->wait();
-                cli.stop_consuming();
-                cli.disconnect()->wait();
+                client.unsubscribe(TOPIC)->wait();
+                client.stop_consuming();
+                client.disconnect()->wait();
                 cout << "OK" << endl;
             }
             else {

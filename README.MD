@@ -17,3 +17,6 @@ https://github.com/eclipse/paho.mqtt.cpp
 
 MQTT Examples
 https://github.com/eclipse/paho.mqtt.cpp/tree/master/src/samples
+
+How to test mqtt <br>
+mosquitto_pub -m "message from mosquitto_pub client" -t "hello"
