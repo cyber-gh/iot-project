@@ -3,3 +3,64 @@
 //
 
 #include "SmartFridgeMqttClient.h"
+
+
+void SmartFridgeMqttClient::runListener() {
+    auto connOpts = mqtt::connect_options_builder()
+            .clean_session(false)
+            .finalize();
+
+    try {
+        // Start consumer before connecting to make sure to not miss messages
+
+        client->start_consuming();
+
+        // Connect to the server
+
+        cout << "Connecting to the MQTT server..." << flush;
+        auto tok = client->connect(connOpts);
+
+        // Getting the connect response will block waiting for the
+        // connection to complete.
+        auto rsp = tok->get_connect_response();
+
+        // If there is no session present, then we need to subscribe, but if
+        // there is a session, then the server remembers us and our
+        // subscriptions.
+        if (!rsp.is_session_present())
+            client->subscribe(TOPIC, QOS)->wait();
+
+        cout << "OK" << endl;
+
+        // Consume messages
+        // This just exits if the client is disconnected.
+        // (See some other examples for auto or manual reconnect)
+
+        cout << "Waiting for messages on topic: '" << TOPIC << "'" << endl;
+
+        while (true) {
+            auto msg = client->consume_message();
+            if (!msg) break;
+            //TODO here were parse the messages, from msg->to_string()
+            cout << msg->get_topic() << ": " << msg->to_string() << endl;
+        }
+
+        // If we're here, the client was almost certainly disconnected.
+        // But we check, just to make sure.
+
+        if (client->is_connected()) {
+            cout << "\nShutting down and disconnecting from the MQTT server..." << flush;
+            client->unsubscribe(TOPIC)->wait();
+            client->stop_consuming();
+            client->disconnect()->wait();
+            cout << "OK" << endl;
+        }
+        else {
+            cout << "\nClient was disconnected" << endl;
+        }
+    }
+    catch (const mqtt::exception& exc) {
+        cerr << "\n  " << exc << endl;
+        return ;
+    }
+}
