@@ -80,6 +80,67 @@
         }
       }
     },
+    "/products/{pName}": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Get product",
+        "description": "Returns a single product by matching name",
+        "operationId": "getProduct",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pName",
+            "in": "path",
+            "description": "Product name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Delete product",
+        "description": "Delete a single product by matching name",
+        "operationId": "deleteProduct",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pName",
+            "in": "path",
+            "description": "Product name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
     "/fridge/temparature": {
       "get": {
         "tags": [
@@ -102,7 +163,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/fridge/temparature/{temp}": {
       "post": {
         "tags": [
           "fridge"
@@ -118,8 +181,8 @@
         ],
         "parameters": [
           {
-            "name": "temperature",
-            "in": "query",
+            "name": "temp",
+            "in": "path",
             "description": "Desired temperature of the fridge",
             "required": true,
             "type": "string"
@@ -156,7 +219,7 @@
         }
       }
     },
-    "/fridge/recommendProduct/{product1}/{product2}": {
+    "/fridge/recommendProduct/{p1Name}/{p2Name}": {
       "get": {
         "tags": [
           "fridge"
@@ -172,14 +235,14 @@
         ],
         "parameters": [
           {
-            "name": "product1",
+            "name": "p1Name",
             "in": "path",
             "description": "Name of the first product",
             "required": true,
             "type": "string"
           },
           {
-            "name": "product2",
+            "name": "p2Name",
             "in": "path",
             "description": "Name of the second product",
             "required": true,
