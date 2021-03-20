@@ -36,6 +36,7 @@ private:
     void setEcoMode(const Rest::Request &request, Http::ResponseWriter response);
     void recommendProduct(const Rest::Request &request, Http::ResponseWriter response);
 
+    void Test(const Rest::Request &request, Http::ResponseWriter response);
 
 public:
     explicit SmartFridgeService(Address addr = Address(Ipv4::any(), Port(9080))): httpEndpoint(std::make_shared<Http::Endpoint>(addr)) {
