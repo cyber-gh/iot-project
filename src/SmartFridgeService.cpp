@@ -20,6 +20,8 @@ void SmartFridgeService::setupRoutes() {
 
     Routes::Put(router, "/fridge/eco", Routes::bind(&SmartFridgeService::setEcoMode, this));
     Routes::Get(router, "/fridge/recommendProduct/:p1Name?/:p2Name?", Routes::bind(&SmartFridgeService::recommendProduct, this));
+
+    Routes::Get(router, "/test", Routes::bind(&SmartFridgeService::Test, this));
 }
 
 void addJsonContentTypeHeader(Http::ResponseWriter &response) {
@@ -204,4 +206,17 @@ void SmartFridgeService::recommendProduct(const Rest::Request &request, Http::Re
     }
 
     response.send(Http::Code::Bad_Request);
+}
+
+void SmartFridgeService::Test(const Rest::Request &request, Http::ResponseWriter response) {
+//    curl -X GET localhost:9080/test?testParam=test
+    addJsonContentTypeHeader(response);
+
+    if (request.query().has("testParam")) {
+        cout << request.query().get("testParam").get() << endl;
+    } else {
+        cout << "Query parameter missing" << endl;
+    }
+
+    response.send(Http::Code::Ok);
 }
