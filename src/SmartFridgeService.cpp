@@ -108,7 +108,6 @@ void SmartFridgeService::deleteProduct(const Rest::Request &request, Http::Respo
         Search searcher = Search();
         string pName = request.param(":pName").as<string>();
         auto query = searcher.genDeleteProductQuery(pName);
-        cout << query;
         DatabaseAccess db = DatabaseAccess::getInstance();
         db.executeQuery(query);
     } catch (...) {
