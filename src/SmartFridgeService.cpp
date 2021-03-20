@@ -60,10 +60,10 @@ void SmartFridgeService::getAProduct(const Rest::Request &request, Http::Respons
 
 
     vector<vector<string>> v = db.selectQuery(query);
-    vector<Product> ans;
+    Product ans;
 
-    for (auto it: v) {
-        ans.push_back(Product::parse(it));
+    if (v.size() > 0) {
+        ans = Product::parse(v[0]);
     }
 
     json j = ans;
