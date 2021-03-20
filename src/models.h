@@ -54,6 +54,14 @@ struct Search {
 
         return query;
     }
+
+    string genDeleteProductQuery(const string &productName) {
+        string query = "";
+        query += "DELETE FROM Products where name=";
+        query += formatString(productName);
+
+        return query;
+    }
 };
 
 

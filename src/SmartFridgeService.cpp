@@ -11,6 +11,9 @@ void SmartFridgeService::setupRoutes() {
 
     Routes::Get(router, "/products", Routes::bind(&SmartFridgeService::getAllProducts, this));
     Routes::Post(router, "/products", Routes::bind(&SmartFridgeService::insertProduct, this));
+    Routes::Delete(router, "/products/:pName?", Routes::bind(&SmartFridgeService::deleteProduct, this));
+
+    Routes::Get(router, "/products/:pName", Routes::bind(&SmartFridgeService::getAProduct, this));
 
     Routes::Post(router, "/setTemperature/:temp", Routes::bind(&SmartFridgeService::setTemperature, this));
     Routes::Get(router, "/getTemperature", Routes::bind(&SmartFridgeService::getTemperature, this));
@@ -35,6 +38,32 @@ void SmartFridgeService::getAllProducts(const Rest::Request &request, Http::Resp
 
     for (auto it: v) {
         ans.push_back(Product::parse(it));
+    }
+
+    json j = ans;
+    response.send(Http::Code::Ok, j.dump());
+}
+
+void SmartFridgeService::getAProduct(const Rest::Request &request, Http::ResponseWriter response) {
+    addJsonContentTypeHeader(response);
+
+    if (!request.hasParam(":pName")) {    
+        response.send(Http::Code::Bad_Request);
+        return;
+    }
+    Search searcher = Search();
+    string pName = request.param(":pName").as<string>();
+
+    DatabaseAccess db = DatabaseAccess::getInstance();
+
+    auto query = searcher.genSearchFilter(pName);
+
+
+    vector<vector<string>> v = db.selectQuery(query);
+    Product ans;
+
+    if (v.size() > 0) {
+        ans = Product::parse(v[0]);
     }
 
     json j = ans;
@@ -66,6 +95,27 @@ void SmartFridgeService::getTemperature(const Rest::Request &request, Http::Resp
 
     json j = ans.temp;
     response.send(Http::Code::Ok, j.dump());
+}
+
+void SmartFridgeService::deleteProduct(const Rest::Request &request, Http::ResponseWriter response) {
+    addJsonContentTypeHeader(response);
+
+    try {
+        if (!request.hasParam(":pName")) {    
+            response.send(Http::Code::Bad_Request);
+            return;
+        }
+        Search searcher = Search();
+        string pName = request.param(":pName").as<string>();
+        auto query = searcher.genDeleteProductQuery(pName);
+        DatabaseAccess db = DatabaseAccess::getInstance();
+        db.executeQuery(query);
+    } catch (...) {
+        response.send(Http::Code::Bad_Request);
+        return;
+    }
+
+    response.send(Http::Code::Ok);
 }
 
 void SmartFridgeService::insertProduct(const Rest::Request &request, Http::ResponseWriter response) {
