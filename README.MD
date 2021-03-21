@@ -33,4 +33,9 @@ http://localhost:9080/fridge/recommendProduct/Mere/Pere -- if this products are 
                                                            recommend product with min expire date
                                                         else:
                                                            recommend most similiar product by name with min expire date
+                                                           
+http://localhost:9080/fridge/temperature/ -- get current temperature     
+
+http://localhost:9080/fridge/temperature/:temp -- set temperature as temp
+
 </pre>    
