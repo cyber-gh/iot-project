@@ -15,8 +15,8 @@ void SmartFridgeService::setupRoutes() {
 
     Routes::Get(router, "/products/:pName", Routes::bind(&SmartFridgeService::getAProduct, this));
 
-    Routes::Post(router, "/setTemperature/:temp", Routes::bind(&SmartFridgeService::setTemperature, this));
-    Routes::Get(router, "/getTemperature", Routes::bind(&SmartFridgeService::getTemperature, this));
+    Routes::Post(router, "/fridge/temperature/:temp", Routes::bind(&SmartFridgeService::setTemperature, this));
+    Routes::Get(router, "/fridge/temperature", Routes::bind(&SmartFridgeService::getTemperature, this));
 
     Routes::Put(router, "/fridge/eco", Routes::bind(&SmartFridgeService::setEcoMode, this));
     Routes::Get(router, "/fridge/recommendProduct/:p1Name?/:p2Name?", Routes::bind(&SmartFridgeService::recommendProduct, this));
@@ -74,7 +74,7 @@ void SmartFridgeService::getAProduct(const Rest::Request &request, Http::Respons
 
 
 void SmartFridgeService::setTemperature(const Rest::Request &request, Http::ResponseWriter response) { 
-    //curl -X POST localhost:9080/setTemperature/20
+    //curl -X POST localhost:9080/fridge/temperature/20
     addJsonContentTypeHeader(response);
 
     DatabaseAccess db = DatabaseAccess::getInstance();
@@ -87,17 +87,15 @@ void SmartFridgeService::setTemperature(const Rest::Request &request, Http::Resp
 
 
 void SmartFridgeService::getTemperature(const Rest::Request &request, Http::ResponseWriter response) {
-    //curl localhost:9080/getTemperature
+    //curl localhost:9080/fridge/temperature
     addJsonContentTypeHeader(response);
 
-    DatabaseAccess db = DatabaseAccess::getInstance();
-    string query = Fridge::getTempQuery();
-    vector<vector<string>> v = db.selectQuery(query);
-    Fridge ans = Fridge::parse(v[0]);
+    int temp = Fridge::getTemperature();
 
-    json j = ans.temp;
+    json j = temp;
     response.send(Http::Code::Ok, j.dump());
 }
+
 
 void SmartFridgeService::deleteProduct(const Rest::Request &request, Http::ResponseWriter response) {
     addJsonContentTypeHeader(response);

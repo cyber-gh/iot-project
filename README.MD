@@ -24,6 +24,9 @@ https://github.com/eclipse/paho.mqtt.cpp/tree/master/src/samples
 How to test mqtt <br>
 mosquitto_pub -m "message from mosquitto_pub client" -t "hello"
 
+mosquitto_sub -t "status" -q 1
+
+
 <h2>API</h2>
 <pre>http://localhost:9080/fridge/recommendProduct/ --recommend products with min expire date
 http://localhost:9080/fridge/recommendProduct/Mere/Pere -- if this products are in fridge:
