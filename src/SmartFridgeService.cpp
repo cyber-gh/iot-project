@@ -90,12 +90,9 @@ void SmartFridgeService::getTemperature(const Rest::Request &request, Http::Resp
     //curl localhost:9080/fridge/temperature
     addJsonContentTypeHeader(response);
 
-    DatabaseAccess db = DatabaseAccess::getInstance();
-    string query = Fridge::getTempQuery();
-    vector<vector<string>> v = db.selectQuery(query);
-    Fridge ans = Fridge::parse(v[0]);
+    int temp = Fridge::getTemperature();
 
-    json j = ans.temp;
+    json j = temp;
     response.send(Http::Code::Ok, j.dump());
 }
 
