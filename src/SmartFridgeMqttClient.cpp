@@ -5,6 +5,11 @@
 #include "SmartFridgeMqttClient.h"
 #include "models.h"
 
+// void process_message(string message) {
+// 	InputStructure is;
+// 	from_json(message, is);
+// }
+
 void SmartFridgeMqttClient::runListener() {
     auto connOpts = mqtt::connect_options_builder()
             .clean_session(false)
@@ -42,6 +47,7 @@ void SmartFridgeMqttClient::runListener() {
             auto msg = client->consume_message();
             if (!msg) break;
             //TODO here were parse the messages, from msg->to_string()
+            // process_message(msg->to_string)
             cout << msg->get_topic() << ": " << msg->to_string() << endl;
         }
 

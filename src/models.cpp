@@ -36,3 +36,9 @@ void from_json(const nlohmann::json& j, Product& p) {
     j.at("date").get_to(p.date);
     j.at("max_temp").get_to(p.maxTemp);
 }
+
+
+void from_json(const nlohmann::json& j, InputStructure& s) {
+    j.at("status").get_to(s.status);
+    j.at("name").get_to(s.value);
+}
