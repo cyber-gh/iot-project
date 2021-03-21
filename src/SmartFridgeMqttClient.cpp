@@ -3,7 +3,7 @@
 //
 
 #include "SmartFridgeMqttClient.h"
-
+#include "models.h"
 
 void SmartFridgeMqttClient::runListener() {
     auto connOpts = mqtt::connect_options_builder()
@@ -11,7 +11,7 @@ void SmartFridgeMqttClient::runListener() {
             .finalize();
 
     try {
-        // Start consumer before connecting to make sure to not miss messages
+        // Start consumer before connecting to make sure to not miss messages = milli
 
         client->start_consuming();
 
@@ -52,6 +52,57 @@ void SmartFridgeMqttClient::runListener() {
             cout << "\nShutting down and disconnecting from the MQTT server..." << flush;
             client->unsubscribe(TOPIC)->wait();
             client->stop_consuming();
+            client->disconnect()->wait();
+            cout << "OK" << endl;
+        }
+        else {
+            cout << "\nClient was disconnected" << endl;
+        }
+    }
+    catch (const mqtt::exception& exc) {
+        cerr << "\n  " << exc << endl;
+        return ;
+    }
+}
+
+void SmartFridgeMqttClient::runPublisher() {
+    auto connOpts = mqtt::connect_options_builder()
+            .clean_session(false)
+            .finalize();
+
+    try {
+
+        cout << "Connecting to the MQTT server..." << flush;
+        auto tok = client->connect(connOpts);
+
+        // Getting the connect response will block waiting for the
+        // connection to complete.
+        auto rsp = tok->get_connect_response();
+
+        // If there is no session present, then we need to subscribe, but if
+        // there is a session, then the server remembers us and our
+        // subscriptions.
+        /*
+        if (!rsp.is_session_present())
+            client->subscribe(STATUS_TOPIC, QOS)->wait();
+        auto top = mqtt::topic(client, STATUS_TOPIC, QOS);*/
+        
+
+        cout << "Publishing for messages on topic: '" << TOPIC << "'" << endl;
+        while (true) {
+            this_thread::sleep_for(DURATION);
+            //TODO here were parse the messages, from msg->to_string()
+            string message = "{{'temperature' : " + to_string(Fridge::getTemperature()) + "} };"  ;
+            const char *payload = message.c_str();
+            client->publish(STATUS_TOPIC, payload, strlen(payload) + 1, 0, false);
+            //top.publish("{{'temperature' : " + to_string(Fridge::retTemperature()) + "} };"  ;
+        }
+
+        // If we're here, the client was almost certainly disconnected.
+        // But we check, just to make sure.
+
+        if (client->is_connected()) {
+            cout << "\nShutting down and disconnecting from the MQTT server..." << flush;
             client->disconnect()->wait();
             cout << "OK" << endl;
         }

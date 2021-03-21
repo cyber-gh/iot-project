@@ -99,6 +99,7 @@ void SmartFridgeService::getTemperature(const Rest::Request &request, Http::Resp
     response.send(Http::Code::Ok, j.dump());
 }
 
+
 void SmartFridgeService::deleteProduct(const Rest::Request &request, Http::ResponseWriter response) {
     addJsonContentTypeHeader(response);
 

@@ -19,6 +19,9 @@ using namespace std;
 const string SERVER_ADDRESS	{ "tcp://localhost:1883" };
 const string CLIENT_ID		{ "smart_fridge_client" };
 const string TOPIC 			{ "fridge_commands" };
+const string STATUS_TOPIC {"status"};
+const auto DURATION = std::chrono::seconds(60);
+
 
 const int  QOS = 1;
 
@@ -34,6 +37,7 @@ public:
     }
 
     void runListener();
+    void runPublisher();
 };
 
 

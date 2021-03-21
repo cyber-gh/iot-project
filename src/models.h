@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include <nlohmann/json.hpp>
+#include "DatabaseAccess.h"
 
 using namespace std;
 
@@ -125,6 +126,16 @@ struct Fridge {
 
         return Fridge(stoi(v[0]), stoi(v[1]));
     }
+
+    static int getTemperature() {
+
+        DatabaseAccess db = DatabaseAccess::getInstance();
+        string query = Fridge::getTempQuery();
+        vector<vector<string>> v = db.selectQuery(query);
+        Fridge ans = Fridge::parse(v[0]);
+
+        return ans.temp;
+    }   
 
     string genInsertQuery() {
         string query = "";

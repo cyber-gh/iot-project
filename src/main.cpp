@@ -14,8 +14,15 @@ int main() {
         if (fork() == 0) {
             system("mosquitto"); //TODO run the broker in a different docker container
         } else {
-            SmartFridgeMqttClient *client = new SmartFridgeMqttClient();
-            client->runListener();
+            if (fork() == 0) {
+                SmartFridgeMqttClient *client = new SmartFridgeMqttClient();
+                client->runListener();
+            }
+            else {
+                SmartFridgeMqttClient *client = new SmartFridgeMqttClient();
+                client->runPublisher();
+            }
+            
         }
     }
 
