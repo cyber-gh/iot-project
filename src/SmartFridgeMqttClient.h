@@ -15,19 +15,30 @@
 #include "mqtt/async_client.h"
 
 using namespace std;
-
-const string SERVER_ADDRESS	{ "tcp://localhost:1883" };
+using namespace std::chrono;
+const string SERVER_PORT {"1882"};
+const string SERVER_ADDRESS	{ "tcp://localhost:" + SERVER_PORT };
 const string CLIENT_ID		{ "smart_fridge_client" };
+const string PUBLISHER_ID		{ "smart_fridge_client" };
 const string TOPIC 			{ "fridge_commands" };
+
+
+
+// How often to sample the "data"
+const auto SAMPLE_PERIOD = std::chrono::milliseconds(10000);
+// How much the "data" needs to change before we publish a new value.
+const int DELTA_MS = 10000;
+// How many to buffer while off-line
+const int MAX_BUFFERED_MESSAGES = 1200;
+
 const string STATUS_TOPIC {"status"};
-const auto DURATION = std::chrono::seconds(60);
 
 
 const int  QOS = 1;
 
 class SmartFridgeMqttClient {
 private:
-
+    void process_message(string message);
 
 public:
     mqtt::async_client *client;
