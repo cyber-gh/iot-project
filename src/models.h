@@ -245,7 +245,7 @@ struct Fridge {
 struct InputStructure {
     string status; // INSERT, DELETE, SETFRIDGE, INCREASE
     string value;
-}
+};
 
 void to_json(nlohmann::json& j, const TestModel& p);
 void to_json(nlohmann::json& j, const Fridge& f);
@@ -253,5 +253,5 @@ void to_json(nlohmann::json& j, const Product& p);
 
 
 void from_json(const nlohmann::json& j, Product& p);
-void to_json(const nlohmann::json& j, InputStructure& s);
+void from_json(const nlohmann::json& j, InputStructure& s);
 

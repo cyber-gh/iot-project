@@ -5,10 +5,22 @@
 #include "SmartFridgeMqttClient.h"
 #include "models.h"
 
-// void process_message(string message) {
-// 	InputStructure is;
-// 	from_json(message, is);
-// }
+void process_message(string message) {
+	InputStructure is;
+	from_json(message, is);
+    DatabaseAccess db = DatabaseAccess::getInstance();
+
+	if (is.status == "DELETE") {
+        Search searcher = Search();
+        auto query = searcher.genDeleteProductQuery(is.value);
+        db.executeQuery(query);
+	} else if (is.status == "SETFRIDGE") {
+		int temp = stoi(is.value);
+	    string query = Fridge::setTempQuery(temp);
+	    db.executeQuery(query);
+	}
+
+}
 
 void SmartFridgeMqttClient::runListener() {
     auto connOpts = mqtt::connect_options_builder()
@@ -47,7 +59,7 @@ void SmartFridgeMqttClient::runListener() {
             auto msg = client->consume_message();
             if (!msg) break;
             //TODO here were parse the messages, from msg->to_string()
-            // process_message(msg->to_string)
+            process_message(msg->to_string());
             cout << msg->get_topic() << ": " << msg->to_string() << endl;
         }
 
