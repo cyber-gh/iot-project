@@ -127,6 +127,17 @@ void SmartFridgeMqttClient::runPublisher() {
 
                 cout << "Publishing message: " << endl;
                 cout << message << endl;
+
+                vector<string> productsVec = Fridge::getAllProductsNames();
+                string products;
+                for (auto product : productsVec) products += product + ", ";
+
+                message = "{{'product_name' : [" + products + "]}};" ;
+                const char *payload2 = message.c_str();
+                top.publish(payload2);
+
+                cout << "Publishing message: " << endl;
+                cout << message << endl;
             }
 
             if (trun > 0 && t >= (trun + tstart))

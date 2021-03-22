@@ -135,7 +135,18 @@ struct Fridge {
         Fridge ans = Fridge::parse(v[0]);
 
         return ans.temp;
-    }   
+    }
+
+    static vector<string> getAllProductsNames() {
+        DatabaseAccess db = DatabaseAccess::getInstance();
+        string query = Fridge::selectAllProductsNames();
+        vector<vector<string>> v = db.selectQuery(query);
+        vector<string> res;
+        for (auto t : v) {
+            res.push_back(t[0]);
+        }
+        return res;
+    }
 
     string genInsertQuery() {
         string query = "";
