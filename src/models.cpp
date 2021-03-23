@@ -40,5 +40,5 @@ void from_json(const nlohmann::json& j, Product& p) {
 
 void from_json(const nlohmann::json& j, InputStructure& s) {
     j.at("status").get_to(s.status);
-    j.at("name").get_to(s.value);
+    j.at("value").get_to(s.value);
 }

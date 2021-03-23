@@ -39,6 +39,7 @@ const int  QOS = 1;
 class SmartFridgeMqttClient {
 private:
     void process_message(string message);
+    string trim_input_message(string msg);
 
 public:
     mqtt::async_client *client;
