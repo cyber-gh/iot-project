@@ -25,9 +25,9 @@ const string TOPIC 			{ "fridge_commands" };
 
 
 // How often to sample the "data"
-const auto SAMPLE_PERIOD = std::chrono::milliseconds(10000);
+const auto SAMPLE_PERIOD = std::chrono::milliseconds(30000);
 // How much the "data" needs to change before we publish a new value.
-const int DELTA_MS = 10000;
+const int DELTA_MS = 30000;
 // How many to buffer while off-line
 const int MAX_BUFFERED_MESSAGES = 1200;
 
