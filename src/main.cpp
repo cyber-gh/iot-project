@@ -12,14 +12,16 @@ int main() {
         service.start();
     } else {
         if (fork() == 0) {
-            system("mosquitto"); //TODO run the broker in a different docker container
+            string command = "mosquitto -p " + SERVER_PORT;
+            system(command.c_str()); //TODO run the broker in a different docker container
         } else {
+            sleep(3);
             if (fork() == 0) {
-                SmartFridgeMqttClient *client = new SmartFridgeMqttClient();
+                SmartFridgeMqttClient *client = new SmartFridgeMqttClient(SERVER_ADDRESS, CLIENT_ID);
                 client->runListener();
             }
             else {
-                SmartFridgeMqttClient *client = new SmartFridgeMqttClient();
+                SmartFridgeMqttClient *client = new SmartFridgeMqttClient(SERVER_ADDRESS, PUBLISHER_ID);
                 client->runPublisher();
             }
             

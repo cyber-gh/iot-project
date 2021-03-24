@@ -38,15 +38,10 @@ vector<vector<string>> DatabaseAccess::selectQuery(const string query) {
     if (exit) {
         std::cerr << "Error open DB " << sqlite3_errmsg(DB) << std::endl;
     }
-    else
-        std::cout << "Opened Database Successfully!" << std::endl;
     int rc = sqlite3_exec(DB, sql.c_str(), selectCallback, (void *)&data, NULL);
 
     if (rc != SQLITE_OK)
         cerr << "Error SELECT" << endl;
-    else {
-        cout << "Operation OK!" << endl;
-    }
 
     sqlite3_close(DB);
 

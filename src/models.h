@@ -135,7 +135,18 @@ struct Fridge {
         Fridge ans = Fridge::parse(v[0]);
 
         return ans.temp;
-    }   
+    }
+
+    static vector<string> getAllProductsNames() {
+        DatabaseAccess db = DatabaseAccess::getInstance();
+        string query = Fridge::selectAllProductsNames();
+        vector<vector<string>> v = db.selectQuery(query);
+        vector<string> res;
+        for (auto t : v) {
+            res.push_back(t[0]);
+        }
+        return res;
+    }
 
     string genInsertQuery() {
         string query = "";
@@ -240,12 +251,31 @@ struct Fridge {
         return res;
     }
 
+    static string increaseQuantityQuery(string productName, int quantity) {
+        string query = "";
+        query += "UPDATE Products\n";
+        query += "SET quantity = quantity + " + to_string(quantity) + "\n";
+        query += "WHERE name='" + productName + "';";
+        return query;
+    }
+
 };
 
 struct InputStructure {
     string status; // INSERT, DELETE, SETFRIDGE, INCREASE
     string value;
-}
+
+};
+
+struct InsertStructure {
+    string status;
+    Product product;
+};
+
+struct IncreaseQuantityStructure {
+    string productName;
+    int quantity;
+};
 
 void to_json(nlohmann::json& j, const TestModel& p);
 void to_json(nlohmann::json& j, const Fridge& f);
@@ -253,5 +283,5 @@ void to_json(nlohmann::json& j, const Product& p);
 
 
 void from_json(const nlohmann::json& j, Product& p);
-void to_json(const nlohmann::json& j, InputStructure& s);
-
+void from_json(const nlohmann::json& j, InputStructure& s);
+void from_json(const nlohmann::json& j, IncreaseQuantityStructure& s);
