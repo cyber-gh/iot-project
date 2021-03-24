@@ -1,3 +1,4 @@
+
 //
 // Created by Soltan Gheorghe on 16.03.2021.
 //
@@ -28,24 +29,37 @@ string SmartFridgeMqttClient::trim_input_message(string msg) {
 }
 
 void SmartFridgeMqttClient::process_message(string message) {
+    DatabaseAccess db = DatabaseAccess::getInstance();
     try {
-    	InputStructure is;
+        InputStructure is;
         auto jsonValue = json::parse(message);
-    	from_json(jsonValue, is);
-        DatabaseAccess db = DatabaseAccess::getInstance();
+        from_json(jsonValue, is);
 
-    	if (is.status == "DELETE") {
+        if (is.status == "DELETE") {
             Search searcher = Search();
             auto query = searcher.genDeleteProductQuery(is.value);
             db.executeQuery(query);
-    	} else if (is.status == "SETFRIDGE") {
-    		int temp = stoi(is.value);
-    	    string query = Fridge::setTempQuery(temp);
-    	    db.executeQuery(query);
-    	}
-    } catch(...) {
-        cout << "There was an error while processing the message";
-    }
+        } else if (is.status == "SETFRIDGE") {
+            int temp = stoi(is.value);
+            string query = Fridge::setTempQuery(temp);
+            db.executeQuery(query);
+        }
+    } catch(std::exception& exc) { }
+    try{
+        Product product;
+        auto jsonValue = json::parse(message);
+        from_json(jsonValue, product);
+        auto query = product.genInsertQuery();
+
+        db.executeQuery(query);
+    } catch (std::exception& exc) { }
+    try {
+        IncreaseQuantityStructure s;
+        auto jsonValue = json::parse(message);
+        from_json(jsonValue, s);
+        auto query = Fridge::increaseQuantityQuery(s.productName, s.quantity);
+        db.executeQuery(query);
+    } catch (std::exception& exc) { }
 }
 
 void SmartFridgeMqttClient::runListener() {
@@ -70,7 +84,8 @@ void SmartFridgeMqttClient::runListener() {
             if (!msg) break;
             //TODO here were parse the messages, from msg->to_string()
             cout << msg->get_topic() << ": " << msg->to_string() << endl;
-            string message = trim_input_message(msg->to_string());
+//            string message = trim_input_message(msg->to_string());
+            string message = msg -> to_string();
             process_message(message);
         }
 
