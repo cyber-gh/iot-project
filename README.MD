@@ -1,12 +1,25 @@
+<h3>Prerequisites</h3>
+<ul>
+    <li>Docker</li>
+    <li>docker-compose</li>
+</ul>
+
 <h2>How to run</h2>
 
-<pre>docker-compose up -d --build</pre> or 
-<pre>sudo docker-compose up -d --build</pre>
-<br>
+<pre>sudo docker-compose up -d --build</pre> 
+
+Alternatively, if you're on an ubuntu system, run all the commands from the Dockerfile step by step
+
+<h4> Analysis report can be found in the documentation folder</h4>
+<h3>Full API Documentation</h3>
+https://app.swaggerhub.com/apis-docs/dioji/smart-fridge/1.0.0
+
+<h3>Example request </h3>
 <pre>curl http://localhost:9080/products</pre>
 
-API Documentation
-https://app.swaggerhub.com/apis-docs/dioji/smart-fridge/1.0.0
+
+
+<h3> Developer Resources</h3>
 
 JSON Usage
 https://kezunlin.me/post/f3c3eb8/ <br>
@@ -21,22 +34,10 @@ https://github.com/eclipse/paho.mqtt.cpp
 MQTT Examples
 https://github.com/eclipse/paho.mqtt.cpp/tree/master/src/samples
 
-How to test mqtt <br>
-mosquitto_pub -p 1882 -m "message from mosquitto_pub client" -t "fridge_commands"
 
-mosquitto_sub -t "status" -q 1
-
-
-<h2>API</h2>
-<pre>http://localhost:9080/fridge/recommendProduct/ --recommend products with min expire date
-http://localhost:9080/fridge/recommendProduct/Mere/Pere -- if this products are in fridge:
-                                                           recommend product with min expire date
-                                                        else:
-                                                           recommend most similiar product by name with min expire date
-                                                           
-http://localhost:9080/fridge/temperature/ -- get current temperature     
-
-http://localhost:9080/fridge/temperature/:temp -- set temperature as temp
+<h2>MQTT API</h2>
+<h3>The backslashes are doubled, use the source code of this page instead</h3>
+```shell
 
 mosquitto_pub -p 1882 -m "{\"date\":\"2021-03-23\",\"id\":1,\"max_temp\":20,\"name\":\"test\",\"quantity\":3}" -t "fridge_commands" - add product
 
@@ -46,4 +47,5 @@ mosquitto_pub -p 1882 -m "{\"productName\":\"Mere\", \"quantity\": 25}" -t "frid
 
 mosquitto_pub -p 1882 -m "{\"status\": \"DELETE\", \"value\": \"Mere\"}" -t "fridge_commands" - Delete Mere objectt
 
-</pre>    
+mosquitto_sub -p 1882 -t "status" -q 1
+```  
