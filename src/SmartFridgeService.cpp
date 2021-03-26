@@ -92,7 +92,9 @@ void SmartFridgeService::getTemperature(const Rest::Request &request, Http::Resp
 
     int temp = Fridge::getTemperature();
 
-    json j = temp;
+    json j = {
+      {"temperature", temp}      
+    };
     response.send(Http::Code::Ok, j.dump());
 }
 
