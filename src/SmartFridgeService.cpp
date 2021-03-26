@@ -140,21 +140,17 @@ void SmartFridgeService::insertProduct(const Rest::Request &request, Http::Respo
     response.send(Http::Code::Ok);
 }
 
+
 void SmartFridgeService::setEcoMode(const Rest::Request &request, Http::ResponseWriter response) {
 //    curl -X PUT localhost:9080/fridge/eco
     addJsonContentTypeHeader(response);
-
-    try {
-        DatabaseAccess db = DatabaseAccess::getInstance();
-        string query = Fridge::setEcoTempQuery();
-        db.executeQuery(query);
-
-    } catch (...) {
+    bool ok = Fridge::setEcoMode();
+    if (!ok) {
         response.send(Http::Code::Internal_Server_Error);
         return;
     }
-
-    response.send(Http::Code::Ok);
+    else 
+        response.send(Http::Code::Ok);
 }
 
 void SmartFridgeService::recommendProduct(const Rest::Request &request, Http::ResponseWriter response) {

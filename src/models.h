@@ -136,6 +136,16 @@ struct Fridge {
 
         return ans.temp;
     }
+    static bool setEcoMode() {
+        try {
+            DatabaseAccess db = DatabaseAccess::getInstance();
+            string query = Fridge::setEcoTempQuery();
+            db.executeQuery(query);
+            return true;
+        } catch (...) {
+            return false;
+        }
+    }
 
     static vector<string> getAllProductsNames() {
         DatabaseAccess db = DatabaseAccess::getInstance();

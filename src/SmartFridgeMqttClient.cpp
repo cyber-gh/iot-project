@@ -28,6 +28,25 @@ string SmartFridgeMqttClient::trim_input_message(string msg) {
     return message;
 }
 
+void SmartFridgeMqttClient::process_voltage(string message) {
+    try {
+        int value = stoi(message);
+        if (value > 100) {
+            return;
+        }
+        bool b = Fridge::setEcoMode();
+        if (b == false) {
+            cout << "Error in set eco mode\n";
+            throw ;
+        }
+        cout << "Low voltage. Setting fridge to eco mode\n";
+    }
+    catch (...) {
+        cout << "Error in processing voltage\n";
+    }
+
+}
+
 void SmartFridgeMqttClient::process_message(string message) {
     DatabaseAccess db = DatabaseAccess::getInstance();
     try {
@@ -74,14 +93,20 @@ void SmartFridgeMqttClient::runListener() {
 
         auto rsp = tok->get_connect_response();
 
-        if (!rsp.is_session_present())
+        if (!rsp.is_session_present()) {
             client->subscribe(TOPIC, QOS)->wait();
+            client->subscribe(VOLTAGE_TOPIC, QOS)->wait();
+        }
         cout << "OK - Client Connected" << endl;
 
         cout << "Waiting for messages on topic: '" << TOPIC << "'" << endl;
         while (true) {
             auto msg = client->consume_message();
             if (!msg) break;
+            if (msg->get_topic() == VOLTAGE_TOPIC) {
+                process_voltage(msg->to_string());
+                continue;
+            }
             //TODO here were parse the messages, from msg->to_string()
             cout << msg->get_topic() << ": " << msg->to_string() << endl;
 //            string message = trim_input_message(msg->to_string());

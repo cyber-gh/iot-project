@@ -32,6 +32,7 @@ const int DELTA_MS = 30000;
 const int MAX_BUFFERED_MESSAGES = 1200;
 
 const string STATUS_TOPIC {"status"};
+const string VOLTAGE_TOPIC {"voltage"};
 
 
 const int  QOS = 1;
@@ -40,6 +41,7 @@ class SmartFridgeMqttClient {
 private:
     void process_message(string message);
     string trim_input_message(string msg);
+    void process_voltage(string voltage);
 
 public:
     mqtt::async_client *client;
