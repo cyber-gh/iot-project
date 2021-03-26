@@ -21,6 +21,9 @@ void SmartFridgeService::setupRoutes() {
     Routes::Put(router, "/fridge/eco", Routes::bind(&SmartFridgeService::setEcoMode, this));
     Routes::Get(router, "/fridge/recommendProduct/:p1Name?/:p2Name?", Routes::bind(&SmartFridgeService::recommendProduct, this));
 
+    Routes::Get(router, "/fridge/photo", Routes::bind(&SmartFridgeService::getPhoto, this));
+    Routes::Put(router, "/fridge/photo", Routes::bind(&SmartFridgeService::updatePhoto, this));
+
     Routes::Get(router, "/test", Routes::bind(&SmartFridgeService::Test, this));
 }
 
@@ -28,6 +31,9 @@ void addJsonContentTypeHeader(Http::ResponseWriter &response) {
     response.headers().add<Http::Header::ContentType>(MIME(Application, Json));
 }
 
+void addTextContentTypeHeader(Http::ResponseWriter &response) {
+    response.headers().add<Http::Header::ContentType>(MIME(Text, Plain));
+}
 
 void SmartFridgeService::getAllProducts(const Rest::Request &request, Http::ResponseWriter response) {
     addJsonContentTypeHeader(response);
@@ -217,4 +223,45 @@ void SmartFridgeService::Test(const Rest::Request &request, Http::ResponseWriter
     }
 
     response.send(Http::Code::Ok);
+}
+
+void SmartFridgeService::getPhoto(const Rest::Request &request, Http::ResponseWriter response) {
+    addTextContentTypeHeader(response);
+    try {
+        string photo = Fridge::getPhoto();
+        response.send(Http::Code::Ok, photo);
+    } catch (char const *msg) {
+        cout << msg << endl;
+        response.send(Http::Code::Bad_Request);
+    }
+}
+
+void SmartFridgeService::updatePhoto(const Rest::Request &request, Http::ResponseWriter response) {
+    addTextContentTypeHeader(response);
+
+    // checking for content-type header
+    string errMsg = "Invalid content-type header";
+    auto content_type = request.headers().tryGet<Http::Header::ContentType>();
+    if (content_type != nullptr) {
+        if (content_type->mime() != MIME(Text, Plain)) {
+            cout << errMsg << endl;
+            response.send(Http::Code::Bad_Request, errMsg);
+            return;
+        }
+    } else {
+        cout << errMsg << endl;
+        response.send(Http::Code::Bad_Request, errMsg);
+        return;
+    }
+
+    try {
+        DatabaseAccess db = DatabaseAccess::getInstance();
+        auto photo = request.body();
+        string query = Fridge::updatePhotoQuery(photo);
+        db.executeQuery(query);
+        response.send(Http::Code::Ok);
+    } catch (char const *msg) {
+        cout << msg << endl;
+        response.send(Http::Code::Bad_Request);
+    }
 }

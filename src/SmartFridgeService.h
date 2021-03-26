@@ -36,6 +36,9 @@ private:
     void setEcoMode(const Rest::Request &request, Http::ResponseWriter response);
     void recommendProduct(const Rest::Request &request, Http::ResponseWriter response);
 
+    void getPhoto(const Rest::Request &request, Http::ResponseWriter response);
+    void updatePhoto(const Rest::Request &request, Http::ResponseWriter response);
+
     void Test(const Rest::Request &request, Http::ResponseWriter response);
 
 public:
