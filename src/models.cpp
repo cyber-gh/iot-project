@@ -25,7 +25,8 @@ void to_json(nlohmann::json& j, const Product& p) {
 void to_json(nlohmann::json& j, const Fridge& f) {
     j = {
             {"id", f.id},
-            {"temp", f.temp}
+            {"temp", f.temp},
+            {"photo", f.photo}
     };
 }
 

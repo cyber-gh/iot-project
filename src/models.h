@@ -115,16 +115,21 @@ struct Product {
 struct Fridge {
     int id;
     int temp;
+    string photo;
 
-    Fridge(int id, int temp) :
-            id(id), temp(temp) {}
+    static string formatString(const string &stringValue) {
+        return "'" + stringValue + "'";
+    }
+
+    Fridge(int id, int temp, string photo) :
+            id(id), temp(temp), photo(photo) {}
 
     static Fridge parse(const vector<string> &v) {
-        if (v.size() != 2) {
+        if (v.size() != 3) {
             throw "Invalid fridge, cannot parse";
         }
 
-        return Fridge(stoi(v[0]), stoi(v[1]));
+        return Fridge(stoi(v[0]), stoi(v[1]), v[2]);
     }
 
     static int getTemperature() {
@@ -145,6 +150,16 @@ struct Fridge {
         } catch (...) {
             return false;
         }
+    }
+
+    static string getPhoto() {
+
+        DatabaseAccess db = DatabaseAccess::getInstance();
+        string query = Fridge::getTempQuery();
+        vector<vector<string>> v = db.selectQuery(query);
+        Fridge ans = Fridge::parse(v[0]);
+
+        return ans.photo;
     }
 
     static vector<string> getAllProductsNames() {
@@ -189,6 +204,13 @@ struct Fridge {
         query += "UPDATE fridges\nSET temp = ";
         query += to_string(newTemp) + "\nWHERE id = ";
         query += to_string(id) + ";";
+        return query;
+    }
+
+    static string updatePhotoQuery(string newPhoto) { // id = 1
+        string query = "";
+        query += "UPDATE fridges\nSET photo = ";
+        query += formatString(newPhoto) + "\nWHERE id = 1;";
         return query;
     }
 
