@@ -1,3 +1,6 @@
+DROP TABLE Products;
+DROP TABLE fridges;
+
 CREATE TABLE Products (
 	id INTEGER NOT NULL,
 	name TEXT NOT NULL,
@@ -19,8 +22,9 @@ select * from Products;
 CREATE TABLE fridges(
 	id INTEGER NOT NULL,
 	temp INTEGER NOT NULL,
+	photo TEXT NOT NULL,
 	PRIMARY KEY (id)
 );
 
-INSERT INTO fridges (id, temp)
-VALUES(1, 100);
+INSERT INTO fridges (id, temp, photo)
+VALUES(1, 100, 'empty');
