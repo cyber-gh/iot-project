@@ -58,7 +58,7 @@ TO TEST API
 
 curl -X GET "http://localhost:9080/products" -H  "accept: application/json"
 
-curl -X POST "http://localhost:9080/products" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{  \"id\": 99,  \"name\": \"oua\",  \"quantity\": 2,  \"date\": \"2020-09-09\",  \"max_temp\": -10}"
+curl -X POST "http://localhost:9080/products" -H  "accept: application/json" -H  "Content-Type: application/json" -d '{  \"id\": 99,  \"name\": \"oua\",  \"quantity\": 2,  \"date\": \"2020-09-09\",  \"max_temp\": -10}"
 
 curl -X GET "http://localhost:9080/products/oua" -H  "accept: application/json"
 
