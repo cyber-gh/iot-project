@@ -62,7 +62,11 @@ curl -X POST "http://localhost:9080/products" -H  "accept: application/json" -H 
 
 curl -X GET "http://localhost:9080/products/oua" -H  "accept: application/json"
 
-curl -X DELETE "http://localhost:9080/products/oua" -H  "accept: application/json"
+curl -X GET "http://localhost:9080/products/3" -H  "accept: application/json" 
+
+curl -X GET "http://localhost:9080/products/2021-03-20" -H  "accept: application/json" 
+
+curl -X DELETE "http://localhost:9080/products/oua" -H  "accept: application/json" 
 
 curl -X GET "http://localhost:9080/fridge/temperature" -H  "accept: application/json"
 

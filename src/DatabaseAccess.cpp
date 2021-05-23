@@ -40,8 +40,10 @@ vector<vector<string>> DatabaseAccess::selectQuery(const string query) {
     }
     int rc = sqlite3_exec(DB, sql.c_str(), selectCallback, (void *)&data, NULL);
 
-    if (rc != SQLITE_OK)
+    if (rc != SQLITE_OK)  {
+        cerr << sqlite3_errmsg(DB);
         cerr << "Error SELECT" << endl;
+    }
 
     sqlite3_close(DB);
 
