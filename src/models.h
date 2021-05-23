@@ -28,23 +28,48 @@ struct TestModel {
 };
 
 struct Search {
+    bool isDate(const char* stringValue) {
+        int a, b, c;
+        return sscanf( stringValue, "%4d-%2d-%2d", &a, &b, &c ) == 3;
+    }
 
     string formatString(const string &stringValue) {
         return "'" + stringValue + "'";
     }
 
-    string genSearchFilter(const string &productName) {
+    string genSearchFilter(const string &stringValue) {
+        const char * aux = stringValue.c_str();
+        if (isDate(aux)) 
+            return genSearchFilterDate(stringValue);
+        try {
+            int x = stoi(stringValue);
+            if (x > 0)
+                return genSearchFilterQuant(x);
+        }
+        catch(...) {}
+        return genSearchFilterName(stringValue);
+    }
+
+    string genSearchFilterName(const string &productName) {
         string query = "";
         query += "SELECT * FROM Products WHERE name=";
-        query += formatString(productName);
+        query += formatString(productName) + ";";
 
         return query;
     }
 
-    string genSearchFilter(const int &maxQuantity) {
+    string genSearchFilterQuant(const int &maxQuantity) {
         string query = "";
-        query += "SELECT * FROM Products WHERE quantity <=";
-        query += to_string(maxQuantity);
+        query += "SELECT * FROM Products WHERE quantity <= ";
+        query += to_string(maxQuantity) + ";";
+
+        return query;
+    }
+    
+    string genSearchFilterDate(const string &maxExpDate) {
+        string query = "";
+        query += "SELECT * FROM Products WHERE date <= ";
+        query += formatString(maxExpDate) + ";";
 
         return query;
     }
